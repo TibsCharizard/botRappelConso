@@ -1,4 +1,4 @@
-![GitHub last commit](https://img.shields.io/github/last-commit/thibaultdelgrande/botRappelConso) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/thibaultdelgrande/botRappelConso) ![GitHub](https://img.shields.io/github/license/thibaultdelgrande/botRappelConso) ![GitHub top language](https://img.shields.io/github/languages/top/thibaultdelgrande/botRappelConso) ![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/thibaultdelgrande/botRappelConso)
+![GitHub last commit](https://img.shields.io/github/last-commit/thibaultdelgrande/botRappelConso) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/thibaultdelgrande/botRappelConso) ![GitHub](https://img.shields.io/github/license/thibaultdelgrande/botRappelConso) ![GitHub top language](https://img.shields.io/github/languages/top/thibaultdelgrande/botRappelConso) ![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/thibaultdelgrande/botRappelConso) ![Discord](https://img.shields.io/discord/1063566210861641858)
 
 # Rappel Conso
 
