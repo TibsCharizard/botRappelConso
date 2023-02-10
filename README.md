@@ -30,8 +30,10 @@ Démarrer le bot avec la commande :
 
 ## Utilisation
 
+> Affiche le dernier rappel conso
+
 `/rappel`
 
-> Affiche le dernier rappel conso
+
   
   
