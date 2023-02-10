@@ -40,9 +40,10 @@ Démarrer le bot avec la commande :
 
 ## Utilisation
 
-> Affiche le dernier rappel conso
-
-`/rappel`
+| Commande 	| Description                                          	|
+|----------	|------------------------------------------------------	|
+| /rappel  	| Envoie le dernier rappel conso                       	|
+| /alerte  	| Active sur le channel actif les alertes rappel conso 	| 
 
 
   
