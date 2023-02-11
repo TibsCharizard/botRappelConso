@@ -30,10 +30,18 @@ Pour fonctionner correctement, le bot doit pouvoir :
 
 Créer le fichier config.json à la racine et ajouter ceci à l'intérieur :
 ```
-{
-	"token": "TOKEN-DU-BOT-DISCORD"
-}
+	{
+		"token": "TOKEN-DU-BOT-DISCORD"
+	}
 ```
+Si vous souhaitez ajouter la commande /alerte, créer un fichier db.json à la racine si il n'existe pas déjà, et ajouter ces valeurs :
+```
+	{
+		"last_id": "0",
+		"channels": []
+	}
+```
+
 Démarrer le bot avec la commande :
 
 `npm start`
