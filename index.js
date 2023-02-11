@@ -18,8 +18,8 @@ async function writeDB(newDB = {
     channels: []
 }) {
     await fs.writeFile('db.json', JSON.stringify({
-        last_id: 0,
-        channels: []
+        last_id: newDB.last_id,
+        channels: newDB.channels
     }));
 }
 
@@ -27,58 +27,58 @@ async function rappelConso() {
     const result = await got.get('https://data.economie.gouv.fr/api/v2/catalog/datasets/rappelconso0/records?order_by=date_de_publication%20desc,reference_fiche%20desc&limit=10&offset=0&timezone=UTC')
     let produit = JSON.parse(result.body).records[0].record.fields;
     let message = {
-        "title": "Rôti Normand - Vallégrain",
-        "description": "Rôti de porc élaboré d'environ 1kg. Rôti farci avec de la farce nature, des tranches de camembert et de pommes, couvert avec des tranches de camembert et de pommes, enroulé dans une crépine.",
-        "url": "https://rappel.conso.gouv.fr/fiche-rappel/9289/Interne",
+        "title": `${produit.noms_des_modeles_ou_references} - ${produit.nom_de_la_marque_du_produit}`,
+        "description": `${produit.informations_complementaires}`,
+        "url": `${produit.lien_vers_la_fiche_rappel}`,
         "color": 15241224,
         "fields": [
             {
                 "name": "Motif du rappel",
-                "value": "Présence de Salmonelle détectée"
+                "value": `${produit.motif_du_rappel}`
             },
             {
                 "name": "Risques encourus par le consommateur",
-                "value": "Salmonella spp (agent responsable de la salmonellose)"
+                "value": `${produit.risques_encourus_par_le_consommateur}`
             },
             {
                 "name": "Conduites à tenir par le consommateur",
-                "value": "Ne plus consommer Rapporter le produit au point de vente"
+                "value": `${produit.conduites_a_tenir_par_le_consommateur}`
             },
             {
-                "name": "Modalités de compensations",
-                "value": "Remboursements"
+                "name": "Modalités de compensation",
+                "value": `${produit.modalites_de_compensation}`
             },
             {
                 "name": "Date de fin de procédure de rappel",
-                "value": "samedi 25 février 2023"
+                "value": `${produit.date_de_fin_de_la_procedure_de_rappel}`
             },
             {
                 "name": "Préconisations sanitaire",
-                "value": "Les toxi-infections alimentaires causées par les salmonelles se traduisent par des troubles gastro-intestinaux (diarrhée, vomissements) d'apparition brutale souvent accompagnés de fièvre et de maux de tête qui surviennent généralement 6h à 72h après la consommation des produits contaminés.  Ces symptômes peuvent être plus prononcés chez les jeunes enfants, les femmes enceintes, les sujets immunodéprimés et les personnes âgées. Les personnes qui auraient consommé ces produits et qui présenteraient ces symptômes sont invitées à consulter leur médecin traitant en lui signalant cette consommation. En l'absence de symptômes dans les 7 jours après la consommation des produits concernés, il est inutile de s'inquiéter et de consulter un médecin. Si le produit doit subir une cuisson avant consommation : la cuisson à cœur des produits (œufs durs, pâtisseries, viandes de volailles…) à +65°C permet de détruire ces bactéries et de prévenir les conséquences d'une telle contamination."
+                "value": `${produit.preconisations_sanitaires}`
             },
             {
                 "name": "Nature juridique du rappel",
-                "value": "Volontaire (sans arrêté préfectoral)"
+                "value": `${produit.nature_juridique_du_rappel}`
             },
             {
                 "name": "Ditributeurs",
-                "value": "Alvidis"
+                "value": `${produit.distributeurs}`
             },
             {
                 "name": "Numéro de contact",
-                "value": "0237299494"
+                "value": `${produit.numero_de_contact}`
             },
             {
                 "name": "Lien vers la fiche de rappel",
-                "value": "https://rappel.conso.gouv.fr/fiche-rappel/9289/Interne"
+                "value": `${produit.lien_vers_la_fiche_rappel}`
             },
             {
                 "name": "Lien vers la liste des distributeurs",
-                "value": "https://rappel.conso.gouv.fr/document/62732bf3-176f-4635-b721-4f2ff10ed0da/Interne/ListeDesDistributeurs"
+                "value": `${produit.lien_vers_la_liste_des_distributeurs}`
             },
             {
                 "name": "Lien vers l'affichette PDF",
-                "value": "https://rappel.conso.gouv.fr/affichettePDF/9289/Interne"
+                "value": `${produit.lien_vers_affichette_pdf}`
             }
         ],
         "author": {
@@ -89,7 +89,7 @@ async function rappelConso() {
             "text": "Bot RappelConso - Thibault Delgrande 2023"
         },
         "image": {
-            "url": "https://rappel.conso.gouv.fr/image/22847cf9-fc11-4757-b079-2664fa03306d.jpg"
+            "url": `${produit.liens_vers_les_images}`
         },
         "thumbnail": {
             "url": "https://www.economie.gouv.fr/files/styles/image_contenu_article_espace/public/files/directions_services/dgccrf/imgs/Lettre_CetC/logo-rappel-conso.jpg"
@@ -102,10 +102,13 @@ async function rappelConso() {
 async function tick() {
     const channel = await client.channels.fetch('1063566212874911858');
     const message = await rappelConso();
-    if (message.id !== last_id) {
-        last_id = message.id;
+    console.log(message.id, db.last_id)
+    if (message.id !== db.last_id) {
+        db.last_id = message.id;
         channel.send({ embeds: [message] });
+        writeDB(db);
     }
+    console.log(message.id, db.last_id)
 }
 
 //commande
@@ -147,6 +150,6 @@ client.on('ready', () => {
     setInterval(tick,527276);
 });
 
-//client.login(config.token);
+client.login(config.token);
 
 

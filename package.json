@@ -1,4 +1,22 @@
 {
+  "name": "bot-rappel-conso",
+  "version": "1.0.0",
+  "description": "Bot discord qui vous préviens en temps réel des altertes d'alerte conso",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thibaultdelgrande/botRappelConso.git"
+  },
+  "author": "",
+  "license": "GPL3.0",
+  "bugs": {
+    "url": "https://github.com/thibaultdelgrande/botRappelConso/issues"
+  },
+  "homepage": "https://github.com/thibaultdelgrande/botRappelConso#readme",
   "type": "module",
   "dependencies": {
     "discord.js": "^14.7.1",
