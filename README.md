@@ -43,7 +43,7 @@ Démarrer le bot avec la commande :
 | Commande 	| Description                                          	|
 |----------	|------------------------------------------------------	|
 | /rappel  	| Envoie le dernier rappel conso                       	|
-| /alerte  	| Active sur le channel actif les alertes rappel conso 	| 
+| /alerte (non implementée pour le moment)	| Active sur le channel actif les alertes rappel conso 	| 
 
 
   
