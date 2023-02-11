@@ -28,7 +28,7 @@ Pour fonctionner correctement, le bot doit pouvoir :
 * Créer des commandes
 * Envoyer des messages
 
-Créer le fichier config.json et ajouter ceci à l'intérieur :
+Créer le fichier config.json à la racine et ajouter ceci à l'intérieur :
 ```
 {
 	"token": "TOKEN-DU-BOT-DISCORD"
