@@ -100,15 +100,16 @@ async function rappelConso() {
 }
 
 async function tick() {
-    const channel = await client.channels.fetch('1063566212874911858');
     const message = await rappelConso();
-    console.log(message.id, db.last_id)
     if (message.id !== db.last_id) {
         db.last_id = message.id;
-        channel.send({ embeds: [message] });
         writeDB(db);
+        for (const channelId of db.channels) {
+            const channel = await client.channels.fetch(channelId);
+            channel.send({ embeds: [message] });
+        }
+
     }
-    console.log(message.id, db.last_id)
 }
 
 //commande
@@ -117,6 +118,14 @@ const commands = [
     name: 'rappel',
     description: 'Envoie le dernier rappel conso',
   },
+  {
+    name: 'alerte',
+    description: 'Active le rappel conso dans ce channel',
+  },
+  {
+    name: 'desactive',
+    description: 'Désactive le rappel conso dans ce channel',
+  }
 ];
 
 const rest = new REST({ version: '10' }).setToken(config.token);
@@ -125,7 +134,7 @@ const rest = new REST({ version: '10' }).setToken(config.token);
   try {
     console.log('Started refreshing application (/) commands.');
 
-    await rest.put(Routes.applicationCommands("1054704035892051988"), { body: commands });
+    await rest.put(Routes.applicationCommands(config.client_id), { body: commands });
 
     console.log('Successfully reloaded application (/) commands.');
   } catch (error) {
@@ -139,6 +148,16 @@ client.on('interactionCreate', async interaction => {
     if (interaction.commandName === 'rappel') {
       await interaction.reply({ embeds: [await rappelConso()] });
     }
+    if (interaction.commandName === 'alerte') {
+        db.channels.push(interaction.channelId);
+        writeDB(db);
+        await interaction.reply({ content: 'Alertes rappel conso activé dans ce channel !', ephemeral: true });
+    }
+    if (interaction.commandName === 'desactive') {
+        db.channels = db.channels.filter(channel => channel !== interaction.channelId);
+        writeDB(db);
+        await interaction.reply({ content: 'Alertes rappel conso désactivé dans ce channel !', ephemeral: true });
+    }
   });
 
 //bot
@@ -147,7 +166,7 @@ client.on('interactionCreate', async interaction => {
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     tick();
-    setInterval(tick,527276);
+    setInterval(tick,1000);
 });
 
 client.login(config.token);

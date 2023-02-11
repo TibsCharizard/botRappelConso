@@ -31,9 +31,14 @@ Pour fonctionner correctement, le bot doit pouvoir :
 Créer le fichier config.json à la racine et ajouter ceci à l'intérieur :
 ```
 	{
-		"token": "TOKEN-DU-BOT-DISCORD"
+		"token": "TOKEN-DU-BOT-DISCORD",
+		"client_id": "CLIENT_ID-DU-BOT-DISCORD"
 	}
 ```
+
+Le CLIENT_ID se trouve dans OAuth2 -> General, sous la section Client Information, dans les paramètres de votre application Discord.
+Le TOKEN se trouve dans Bot sous la section Build-A-Bot, dans les paramètres de votre application Discord. Il se peut que vous deviez regénérer votre TOKEN.
+
 Si vous souhaitez ajouter la commande /alerte, créer un fichier db.json à la racine si il n'existe pas déjà, et ajouter ces valeurs :
 ```
 	{
@@ -51,7 +56,8 @@ Démarrer le bot avec la commande :
 | Commande 	| Description                                          	|
 |----------	|------------------------------------------------------	|
 | /rappel  	| Envoie le dernier rappel conso                       	|
-| /alerte (non implementée pour le moment)	| Active sur le channel actif les alertes rappel conso 	| 
+| /alerte   | Active sur le channel actif les alertes rappel conso 	| 
+| /desactive| Désactive sur le channel actif les alertes rappel conso|
 
 
   
