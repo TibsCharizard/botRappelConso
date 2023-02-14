@@ -11,7 +11,7 @@ if (!await fs.access('db.json', fs.constants.F_OK).catch(() => '')) {
     }));
 }
 
-const db = JSON.parse(await fs.readFile('db.json'));
+let db = JSON.parse(await fs.readFile('db.json'));
 
 async function writeDB(newDB = {
     last_id: 0,
@@ -102,6 +102,7 @@ async function rappelConso() {
 async function tick() {
     const message = await rappelConso();
     if (message.id !== db.last_id) {
+        let db = JSON.parse(await fs.readFile('db.json'));
         db.last_id = message.id;
         writeDB(db);
         for (const channelId of db.channels) {
@@ -149,11 +150,13 @@ client.on('interactionCreate', async interaction => {
       await interaction.reply({ embeds: [await rappelConso()] });
     }
     if (interaction.commandName === 'alerte') {
+        let db = JSON.parse(await fs.readFile('db.json'));
         db.channels.push(interaction.channelId);
         writeDB(db);
         await interaction.reply({ content: 'Alertes rappel conso activé dans ce channel !', ephemeral: true });
     }
     if (interaction.commandName === 'desactive') {
+        let db = JSON.parse(await fs.readFile('db.json'));
         db.channels = db.channels.filter(channel => channel !== interaction.channelId);
         writeDB(db);
         await interaction.reply({ content: 'Alertes rappel conso désactivé dans ce channel !', ephemeral: true });
@@ -166,7 +169,7 @@ client.on('interactionCreate', async interaction => {
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     tick();
-    setInterval(tick,1000);
+    setInterval(tick,60000);
 });
 
 client.login(config.token);
