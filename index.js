@@ -4,7 +4,7 @@ import config from './config.json' assert { type: "json" };
 import got from 'got';
 import fs from 'fs/promises';
 
-if (!await fs.access('db.json', fs.constants.F_OK).catch(() => '')) {
+if (await fs.access('db.json', fs.constants.F_OK).catch(() => '')) {
     await fs.writeFile('db.json', JSON.stringify({
         last_id: 0,
         channels: []
@@ -100,16 +100,20 @@ async function rappelConso() {
 }
 
 async function tick() {
+    console.log("Vérification de la présence d'un nouveau rappel conso");
     const message = await rappelConso();
+    db = JSON.parse(await fs.readFile('db.json'));
     if (message.id !== db.last_id) {
-        let db = JSON.parse(await fs.readFile('db.json'));
+        console.log("Nouveau rappel conso")
         db.last_id = message.id;
         writeDB(db);
         for (const channelId of db.channels) {
             const channel = await client.channels.fetch(channelId);
             channel.send({ embeds: [message] });
         }
-
+    }
+    else{
+        console.log("Aucun nouveau rappel conso detecté.")
     }
 }
 
@@ -147,16 +151,19 @@ client.on('interactionCreate', async interaction => {
     if (!interaction.isChatInputCommand()) return;
   
     if (interaction.commandName === 'rappel') {
+      console.log(`Rappel utilisé dans le salon ${interaction.channelId} par ${interaction.user.username}#${interaction.user.discriminator} (id : ${interaction.user.id})`)
       await interaction.reply({ embeds: [await rappelConso()] });
     }
     if (interaction.commandName === 'alerte') {
-        let db = JSON.parse(await fs.readFile('db.json'));
+        console.log(`Alertes activées dans le salon ${interaction.channelId} par ${interaction.user.username}#${interaction.user.discriminator} (id : ${interaction.user.id})`);
+        db = JSON.parse(await fs.readFile('db.json'));
         db.channels.push(interaction.channelId);
         writeDB(db);
         await interaction.reply({ content: 'Alertes rappel conso activé dans ce channel !', ephemeral: true });
     }
     if (interaction.commandName === 'desactive') {
-        let db = JSON.parse(await fs.readFile('db.json'));
+        console.log(`Alertes desactivées dans le salon ${interaction.channelId} par ${interaction.user.username}#${interaction.user.discriminator} (id : ${interaction.user.id})`);
+        db = JSON.parse(await fs.readFile('db.json'));
         db.channels = db.channels.filter(channel => channel !== interaction.channelId);
         writeDB(db);
         await interaction.reply({ content: 'Alertes rappel conso désactivé dans ce channel !', ephemeral: true });
