@@ -13,6 +13,13 @@ https://rappel.conso.gouv.fr/
 2. Sélectionner le serveur discord
 3. Cocher les autorisations que vous souhaitez. Pour que le bot fonctionne, sélectionner au moins `Envoyer des messages` et `Utiliser les commandes de l'application`
 
+## Utilisation
+
+| Commande 	| Description                                          	|
+|----------	|------------------------------------------------------	|
+| /rappel  	| Envoie le dernier rappel conso                       	|
+| /alerte   | Active sur le channel actif les alertes rappel conso 	| 
+| /desactive| Désactive sur le channel actif les alertes rappel conso|
 
 ## Installation
 
@@ -50,15 +57,4 @@ Si vous souhaitez ajouter la commande /alerte, créer un fichier db.json à la r
 Démarrer le bot avec la commande :
 
 `npm start`
-
-## Utilisation
-
-| Commande 	| Description                                          	|
-|----------	|------------------------------------------------------	|
-| /rappel  	| Envoie le dernier rappel conso                       	|
-| /alerte   | Active sur le channel actif les alertes rappel conso 	| 
-| /desactive| Désactive sur le channel actif les alertes rappel conso|
-
-
-  
   
