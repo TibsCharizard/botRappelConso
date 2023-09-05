@@ -24,8 +24,20 @@ async function writeDB(newDB = {
 }
 
 async function rappelConso() {
-    const result = await got.get('https://data.economie.gouv.fr/api/v2/catalog/datasets/rappelconso0/records?order_by=date_de_publication%20desc,reference_fiche%20desc&limit=10&offset=0&timezone=UTC')
-    let produit = JSON.parse(result.body).records[0].record.fields;
+    let flux = await got.get('https://rappel.conso.gouv.fr/rss');
+    let result = [];
+    let i = 1;
+    while (result.length === 0) {
+        // Récuperer le premier item
+        let item = flux.body.split('<item>')[i].split('</item>')[0];
+        // Récuperer le lien vers la fiche de rappel
+        let link = item.split('<link>')[1].split('</link>')[0];
+        let resultat = await got.get(`https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/rappelconso0/records?where=lien_vers_la_fiche_rappel%3D%22${link}%22`);
+        result = JSON.parse(resultat.body).results;
+        i++;
+
+    }
+    let produit = result[0];
     let message = {
         "title": `${produit.noms_des_modeles_ou_references} - ${produit.nom_de_la_marque_du_produit}`,
         "description": `${produit.informations_complementaires}`,
