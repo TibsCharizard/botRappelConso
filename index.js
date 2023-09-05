@@ -6,7 +6,7 @@ import fs from 'fs/promises';
 
 if (await fs.access('db.json', fs.constants.F_OK).catch(() => '')) {
     await fs.writeFile('db.json', JSON.stringify({
-        last_id: 0,
+        id: [],
         channels: []
     }));
 }
@@ -14,11 +14,11 @@ if (await fs.access('db.json', fs.constants.F_OK).catch(() => '')) {
 let db = JSON.parse(await fs.readFile('db.json'));
 
 async function writeDB(newDB = {
-    last_id: 0,
+    id: [],
     channels: []
 }) {
     await fs.writeFile('db.json', JSON.stringify({
-        last_id: newDB.last_id,
+        id: newDB.id,
         channels: newDB.channels
     }));
 }
@@ -115,9 +115,9 @@ async function tick() {
     console.log("Vérification de la présence d'un nouveau rappel conso");
     const message = await rappelConso();
     db = JSON.parse(await fs.readFile('db.json'));
-    if (message.id !== db.last_id) {
+    if (!db.id.includes(message.id)) {
         console.log("Nouveau rappel conso")
-        db.last_id = message.id;
+        db.id.push(message.id);
         writeDB(db);
         for (const channelId of db.channels) {
             const channel = await client.channels.fetch(channelId);
