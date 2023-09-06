@@ -123,9 +123,7 @@ async function tick() {
             channel.send({ embeds: [message] }).catch((err) => {
                 console.log(err);
                 if (err.code > 50000) {
-                    db.channels = db.channels.filter(channel => channel !== channelId);
-                    writeDB(db);
-                    console.log(`Impossible d'envoyer le message dans le salon ${channelId}, il a été supprimé de la liste des salons à alerter`);
+                    console.log(`Impossible d'envoyer le message dans le salon ${channelId}`);
                 }
             });
         }
