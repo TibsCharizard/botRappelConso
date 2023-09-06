@@ -112,7 +112,6 @@ async function rappelConso() {
 }
 
 async function tick() {
-    console.log("Vérification de la présence d'un nouveau rappel conso");
     const message = await rappelConso();
     db = JSON.parse(await fs.readFile('db.json'));
     if (!db.id.includes(message.id)) {
@@ -121,11 +120,15 @@ async function tick() {
         writeDB(db);
         for (const channelId of db.channels) {
             const channel = await client.channels.fetch(channelId);
-            channel.send({ embeds: [message] });
+            channel.send({ embeds: [message] }).catch((err) => {
+                console.log(err);
+                if (err.code > 50000) {
+                    db.channels = db.channels.filter(channel => channel !== channelId);
+                    writeDB(db);
+                    console.log(`Impossible d'envoyer le message dans le salon ${channelId}, il a été supprimé de la liste des salons à alerter`);
+                }
+            });
         }
-    }
-    else{
-        console.log("Aucun nouveau rappel conso detecté.")
     }
 }
 
